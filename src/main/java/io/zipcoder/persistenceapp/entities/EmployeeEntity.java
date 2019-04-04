@@ -31,7 +31,12 @@ public class EmployeeEntity {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "departmentNumber")
   @Autowired
-  private DepartmentEntity deptNumber;
+  private DepartmentEntity emplDept;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "departmentNumber")
+  @Autowired
+  private DepartmentEntity managerDept;
 
   public EmployeeEntity() {
   }
@@ -102,11 +107,27 @@ public class EmployeeEntity {
   }
 
   public DepartmentEntity getDepartmentNumber() {
-    return deptNumber;
+    return emplDept;
   }
 
   public void setDepartmentNumber(DepartmentEntity departmentNumber) {
-    this.deptNumber = departmentNumber;
+    this.emplDept = departmentNumber;
+  }
+
+  public DepartmentEntity getEmplDept() {
+    return emplDept;
+  }
+
+  public void setEmplDept(DepartmentEntity emplDept) {
+    this.emplDept = emplDept;
+  }
+
+  public DepartmentEntity getManagerDept() {
+    return managerDept;
+  }
+
+  public void setManagerDept(DepartmentEntity managerDept) {
+    this.managerDept = managerDept;
   }
 
   @Override
@@ -115,18 +136,19 @@ public class EmployeeEntity {
     if (o == null || getClass() != o.getClass()) return false;
     EmployeeEntity that = (EmployeeEntity) o;
     return employeeNumber.equals(that.employeeNumber) &&
-      firstName.equals(that.firstName) &&
-      lastName.equals(that.lastName) &&
+      Objects.equals(firstName, that.firstName) &&
+      Objects.equals(lastName, that.lastName) &&
       Objects.equals(title, that.title) &&
       Objects.equals(phoneNumber, that.phoneNumber) &&
       Objects.equals(email, that.email) &&
       Objects.equals(hireDate, that.hireDate) &&
-      deptNumber.equals(that.deptNumber);
+      emplDept.equals(that.emplDept) &&
+      managerDept.equals(that.managerDept);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(employeeNumber, firstName, lastName, title, phoneNumber, email, hireDate, deptNumber);
+    return Objects.hash(employeeNumber, firstName, lastName, title, phoneNumber, email, hireDate, emplDept, managerDept);
   }
 
   @Override
@@ -139,7 +161,8 @@ public class EmployeeEntity {
       ", phoneNumber='" + phoneNumber + '\'' +
       ", email='" + email + '\'' +
       ", hireDate=" + hireDate +
-      ", departmentNumber=" + deptNumber +
+      ", emplDept=" + emplDept +
+      ", managerDept=" + managerDept +
       '}';
   }
 }

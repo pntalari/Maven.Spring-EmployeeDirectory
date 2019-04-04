@@ -7,15 +7,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-//@Table(name = "department", catalog = "Employee_Directory")
 public class DepartmentEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
- // @Column(name = "dept_num")
   private Long departmentNumber;
-
- // @Column(name = "dept_name")
   private String departmentName;
 
 
@@ -24,16 +20,16 @@ public class DepartmentEntity {
   @Autowired
   private EmployeeEntity manager;
 
-  @OneToMany(mappedBy = "deptNumber", cascade = CascadeType.ALL, targetEntity = EmployeeEntity.class)
+  @JoinColumn
+  @OneToMany(mappedBy = "emplDept", cascade = CascadeType.ALL, targetEntity = EmployeeEntity.class)
   private List<EmployeeEntity> employeesList;
 
+  public DepartmentEntity() {
+  }
 
   public DepartmentEntity(String departmentName, List<EmployeeEntity> employeesList) {
     this.departmentName = departmentName;
     this.employeesList = employeesList;
-  }
-
-  public DepartmentEntity() {
   }
 
   public Long getDepartmentNumber() {
@@ -90,7 +86,7 @@ public class DepartmentEntity {
       "departmentNumber=" + departmentNumber +
       ", departmentName='" + departmentName + '\'' +
       ", manager=" + manager +
-      ", employeesList=" + employeesList+
+      ", employeesList=" + employeesList +
       '}';
   }
 }
