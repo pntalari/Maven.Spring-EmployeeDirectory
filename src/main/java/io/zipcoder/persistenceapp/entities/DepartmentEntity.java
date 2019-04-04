@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "department", catalog = "Employee_Directory")
+//@Table(name = "department", catalog = "Employee_Directory")
 public class DepartmentEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "dept_num")
+ // @Column(name = "dept_num")
   private Long departmentNumber;
 
-  @Column(name = "dept_name")
+ // @Column(name = "dept_name")
   private String departmentName;
 
 
