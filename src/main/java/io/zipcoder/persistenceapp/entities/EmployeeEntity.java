@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "employee", schema = "EmployeeDirectory")
+@Table(name = "employee", catalog = "Employee_Directory")
 public class EmployeeEntity {
 
   @Id
@@ -27,11 +27,11 @@ public class EmployeeEntity {
   @Column(name = "hire_date")
   private Date hireDate;
 
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "departmentNumber")
   @Autowired
-  @ManyToOne
-  @JoinColumn
-  @Column(name = "dept_num")
-  private Long departmentNumber;
+  private DepartmentEntity deptNumber;
 
   public EmployeeEntity() {
   }
@@ -101,12 +101,12 @@ public class EmployeeEntity {
     this.hireDate = hireDate;
   }
 
-  public Long getDepartmentNumber() {
-    return departmentNumber;
+  public DepartmentEntity getDepartmentNumber() {
+    return deptNumber;
   }
 
-  public void setDepartmentNumber(Long departmentNumber) {
-    this.departmentNumber = departmentNumber;
+  public void setDepartmentNumber(DepartmentEntity departmentNumber) {
+    this.deptNumber = departmentNumber;
   }
 
   @Override
@@ -121,12 +121,12 @@ public class EmployeeEntity {
       Objects.equals(phoneNumber, that.phoneNumber) &&
       Objects.equals(email, that.email) &&
       Objects.equals(hireDate, that.hireDate) &&
-      departmentNumber.equals(that.departmentNumber);
+      deptNumber.equals(that.deptNumber);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(employeeNumber, firstName, lastName, title, phoneNumber, email, hireDate, departmentNumber);
+    return Objects.hash(employeeNumber, firstName, lastName, title, phoneNumber, email, hireDate, deptNumber);
   }
 
   @Override
@@ -139,7 +139,7 @@ public class EmployeeEntity {
       ", phoneNumber='" + phoneNumber + '\'' +
       ", email='" + email + '\'' +
       ", hireDate=" + hireDate +
-      ", departmentNumber=" + departmentNumber +
+      ", departmentNumber=" + deptNumber +
       '}';
   }
 }

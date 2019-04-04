@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "department", schema = "EmployeeDirectory")
+@Table(name = "department", catalog = "Employee_Directory")
 public class DepartmentEntity {
 
   @Id
@@ -18,17 +18,14 @@ public class DepartmentEntity {
   @Column(name = "dept_name")
   private String departmentName;
 
-  @Autowired
+
   @JoinColumn
-  @Column(name = "dept_manager")
-  @OneToOne(mappedBy = "departmentManager", cascade = CascadeType.ALL)
+  @OneToOne(mappedBy = "deptNumber", cascade = CascadeType.ALL,targetEntity = EmployeeEntity.class )
+  @Autowired
   private EmployeeEntity manager;
 
-  @OneToMany(mappedBy = "departmentNumber", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "deptNumber", cascade = CascadeType.ALL, targetEntity = EmployeeEntity.class)
   private List<EmployeeEntity> employeesList;
-
-  @Autowired
-  private EmployeeEntity employee;
 
 
   public DepartmentEntity(String departmentName, List<EmployeeEntity> employeesList) {
@@ -71,14 +68,6 @@ public class DepartmentEntity {
     this.employeesList = employeesList;
   }
 
-  public EmployeeEntity getEmployee() {
-    return employee;
-  }
-
-  public void setEmployee(EmployeeEntity employee) {
-    this.employee = employee;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -87,13 +76,12 @@ public class DepartmentEntity {
     return departmentNumber.equals(that.departmentNumber) &&
       Objects.equals(departmentName, that.departmentName) &&
       Objects.equals(manager, that.manager) &&
-      Objects.equals(employeesList, that.employeesList) &&
-      Objects.equals(employee, that.employee);
+      Objects.equals(employeesList, that.employeesList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(departmentNumber, departmentName, manager, employeesList, employee);
+    return Objects.hash(departmentNumber, departmentName, manager, employeesList);
   }
 
   @Override
@@ -102,8 +90,7 @@ public class DepartmentEntity {
       "departmentNumber=" + departmentNumber +
       ", departmentName='" + departmentName + '\'' +
       ", manager=" + manager +
-      ", employeesList=" + employeesList +
-      ", employee=" + employee +
+      ", employeesList=" + employeesList+
       '}';
   }
 }
