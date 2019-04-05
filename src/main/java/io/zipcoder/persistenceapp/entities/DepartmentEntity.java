@@ -13,18 +13,20 @@ public class DepartmentEntity {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long departmentNumber;
   private String departmentName;
+  private Long managerNumber;
 
-
-  @JoinColumn
-  @OneToOne(mappedBy = "deptNumber", cascade = CascadeType.ALL,targetEntity = EmployeeEntity.class )
+  @OneToOne(fetch = FetchType.EAGER, mappedBy = "managerDept", cascade = CascadeType.ALL,targetEntity = EmployeeEntity.class )
   @Autowired
   private EmployeeEntity manager;
 
-  @JoinColumn
-  @OneToMany(mappedBy = "emplDept", cascade = CascadeType.ALL, targetEntity = EmployeeEntity.class)
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "emplDept", cascade = CascadeType.ALL, targetEntity = EmployeeEntity.class)
   private List<EmployeeEntity> employeesList;
 
   public DepartmentEntity() {
+  }
+
+  public DepartmentEntity(String departmentName) {
+    this.departmentName = departmentName;
   }
 
   public DepartmentEntity(String departmentName, List<EmployeeEntity> employeesList) {
@@ -48,13 +50,13 @@ public class DepartmentEntity {
     this.departmentName = departmentName;
   }
 
-  public EmployeeEntity getManager() {
-    return manager;
-  }
-
-  public void setManager(EmployeeEntity manager) {
-    this.manager = manager;
-  }
+//  public EmployeeEntity getManager() {
+//    return manager;
+//  }
+//
+//  public void setManager(EmployeeEntity manager) {
+//    this.manager = manager;
+//  }
 
   public List<EmployeeEntity> getEmployeesList() {
     return employeesList;
@@ -64,29 +66,37 @@ public class DepartmentEntity {
     this.employeesList = employeesList;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    DepartmentEntity that = (DepartmentEntity) o;
-    return departmentNumber.equals(that.departmentNumber) &&
-      Objects.equals(departmentName, that.departmentName) &&
-      Objects.equals(manager, that.manager) &&
-      Objects.equals(employeesList, that.employeesList);
+  public Long getManagerNumber() {
+    return managerNumber;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(departmentNumber, departmentName, manager, employeesList);
+  public void setManagerNumber(Long managerNumber) {
+    this.managerNumber = managerNumber;
   }
 
-  @Override
-  public String toString() {
-    return "DepartmentEntity{" +
-      "departmentNumber=" + departmentNumber +
-      ", departmentName='" + departmentName + '\'' +
-      ", manager=" + manager +
-      ", employeesList=" + employeesList +
-      '}';
-  }
+//  @Override
+//  public boolean equals(Object o) {
+//    if (this == o) return true;
+//    if (o == null || getClass() != o.getClass()) return false;
+//    DepartmentEntity that = (DepartmentEntity) o;
+//    return departmentNumber.equals(that.departmentNumber) &&
+//      Objects.equals(departmentName, that.departmentName) &&
+//      Objects.equals(manager, that.manager) &&
+//      Objects.equals(employeesList, that.employeesList);
+//  }
+//
+//  @Override
+//  public int hashCode() {
+//    return Objects.hash(departmentNumber, departmentName, manager, employeesList);
+//  }
+//
+//  @Override
+//  public String toString() {
+//    return "DepartmentEntity{" +
+//      "departmentNumber=" + departmentNumber +
+//      ", departmentName='" + departmentName + '\'' +
+//      ", manager=" + manager +
+//      ", employeesList=" + employeesList +
+//      '}';
+//  }
 }

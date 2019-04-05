@@ -1,42 +1,46 @@
 package io.zipcoder.persistenceapp.entities;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-//@Table(name = "employee", catalog = "Employee_Directory")
 public class EmployeeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-//  @Column(name = "emp_num")
+
   private Long employeeNumber;
- // @Column(name = "first_name")
   private String firstName;
-//  @Column(name = "last_name")
   private String lastName;
- // @Column(name = "title")
   private String title;
-//  @Column(name = "phone_num")
   private String phoneNumber;
-//  @Column(name = "email")
   private String email;
-//  @Column(name = "hire_date")
+  @Temporal(TemporalType.DATE)
   private Date hireDate;
 
-
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
   @JoinColumn(name = "departmentNumber")
-  @Autowired
   private DepartmentEntity emplDept;
 
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "departmentNumber")
-  @Autowired
+  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "manager")
   private DepartmentEntity managerDept;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinTable(name = "Employee_Manager",
+      joinColumns = { @JoinColumn(name = "employeeNumber")},
+      inverseJoinColumns = {@JoinColumn(name = "managerNumber")})
+  private EmployeeEntity manager;
+
+  @OneToMany(mappedBy = "manager")
+  private Set<EmployeeEntity> reportees = new HashSet<EmployeeEntity>();
 
   public EmployeeEntity() {
   }
@@ -130,39 +134,59 @@ public class EmployeeEntity {
     this.managerDept = managerDept;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    EmployeeEntity that = (EmployeeEntity) o;
-    return employeeNumber.equals(that.employeeNumber) &&
-      Objects.equals(firstName, that.firstName) &&
-      Objects.equals(lastName, that.lastName) &&
-      Objects.equals(title, that.title) &&
-      Objects.equals(phoneNumber, that.phoneNumber) &&
-      Objects.equals(email, that.email) &&
-      Objects.equals(hireDate, that.hireDate) &&
-      emplDept.equals(that.emplDept) &&
-      managerDept.equals(that.managerDept);
-  }
+//  public EmployeeEntity getManager() {
+//    return manager;
+//  }
+//
+//  public void setManager(EmployeeEntity manager) {
+//    this.manager = manager;
+//  }
+//
+//  public Set<EmployeeEntity> getReportees() {
+//    return reportees;
+//  }
+//
+//  public void setReportees(Set<EmployeeEntity> reportees) {
+//    this.reportees = reportees;
+//  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(employeeNumber, firstName, lastName, title, phoneNumber, email, hireDate, emplDept, managerDept);
-  }
-
-  @Override
-  public String toString() {
-    return "EmployeeEntity{" +
-      "employeeNumber=" + employeeNumber +
-      ", firstName='" + firstName + '\'' +
-      ", lastName='" + lastName + '\'' +
-      ", title='" + title + '\'' +
-      ", phoneNumber='" + phoneNumber + '\'' +
-      ", email='" + email + '\'' +
-      ", hireDate=" + hireDate +
-      ", emplDept=" + emplDept +
-      ", managerDept=" + managerDept +
-      '}';
-  }
+//  @Override
+//  public boolean equals(Object o) {
+//    if (this == o) return true;
+//    if (o == null || getClass() != o.getClass()) return false;
+//    EmployeeEntity that = (EmployeeEntity) o;
+//    return employeeNumber.equals(that.employeeNumber) &&
+//      Objects.equals(firstName, that.firstName) &&
+//      Objects.equals(lastName, that.lastName) &&
+//      Objects.equals(title, that.title) &&
+//      Objects.equals(phoneNumber, that.phoneNumber) &&
+//      Objects.equals(email, that.email) &&
+//      Objects.equals(hireDate, that.hireDate) &&
+//      emplDept.equals(that.emplDept) &&
+//      Objects.equals(managerDept, that.managerDept) &&
+//      Objects.equals(manager, that.manager) &&
+//      Objects.equals(reportees, that.reportees);
+//  }
+//
+//  @Override
+//  public int hashCode() {
+//    return Objects.hash(employeeNumber, firstName, lastName, title, phoneNumber, email, hireDate, emplDept, managerDept, manager, reportees);
+//  }
+//
+//  @Override
+//  public String toString() {
+//    return "EmployeeEntity{" +
+//      "employeeNumber=" + employeeNumber +
+//      ", firstName='" + firstName + '\'' +
+//      ", lastName='" + lastName + '\'' +
+//      ", title='" + title + '\'' +
+//      ", phoneNumber='" + phoneNumber + '\'' +
+//      ", email='" + email + '\'' +
+//      ", hireDate=" + hireDate +
+//      ", emplDept=" + emplDept +
+//      ", managerDept=" + managerDept +
+//      ", manager=" + manager +
+//      ", reportees=" + reportees +
+//      '}';
+//  }
 }
