@@ -8,53 +8,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class Services {
 
     @Autowired
-    private EmployeeRepository emplyRepo;
+    private EmployeeRepository emplRepo;
+    @Autowired
     private DepartmentRepository deptRepo;
 
-    //    Create employee (Via POST)
+    // Constructor
     public Services(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
-        this.emplyRepo = employeeRepository;
+        this.emplRepo = employeeRepository;
         this.deptRepo = departmentRepository;
     }
 
-    // create Employee
-    public EmployeeEntity createEmployee(EmployeeEntity employee, DepartmentEntity department) {
-        department.setEmployeesList(new ArrayList<EmployeeEntity>());
-        department.getEmployeesList().add(employee);
-        this.deptRepo.save(department);
-        return this.emplyRepo.save(employee);
-    }
-
-    //Get all employees
-    public Iterable<EmployeeEntity> getAllEmployees() {
-        return this.emplyRepo.findAll();
-    }
-
-    // Get all employees of a particular department
-    public Iterable<EmployeeEntity> getEmployeesByDept(DepartmentEntity department) {
-        return this.emplyRepo.findAll();
-    }
-
-    // Remove a particular employee or list of employees
-    public Boolean deleteOneEmpl(EmployeeEntity... employee) {
-        int i = 0;
-        Boolean flag = false;
-        while (i < employee.length) {
-            this.emplyRepo.delete(employee[i]);
-            flag = true;
-        }
-        return flag;
+    // Create Employee
+    public EmployeeEntity createEmployee(EmployeeEntity employee) {
+        return this.emplRepo.save(employee);
     }
 
     // Create a Department
     public DepartmentEntity createDept(DepartmentEntity department){
-        return deptRepo.save(department);
+        return this.deptRepo.save(department);
+    }
+
+
+    //Get all employees
+    public List<EmployeeEntity> getAllEmployees() {
+        return this.emplRepo.findAll();
+    }
+
+    // Get all employees of a particular department
+    public List<EmployeeEntity> getEmployeesByDept(DepartmentEntity department) {
+        return this.emplRepo.findAllByDepartmentNumber(department.getDepartmentNumber());
+    }
+
+    // Remove a particular employee or list of employees
+    public Boolean deleteEmpl(EmployeeEntity... employees) {
+        int i = 0;
+        Boolean flag = false;
+        while (i < employees.length) {
+            this.emplRepo.delete(employees[i]);
+            flag = true;
+        }
+        return flag;
     }
 
     // Change the name of a department
@@ -66,9 +67,12 @@ public class Services {
     }
 
     // Remove all employees from a particular department
-    public Boolean deleteAllEmployees(DepartmentEntity department) {
+    public Boolean deleteAllEmployeesInDept(Long departmentNumber) {
 
-//        List<EmployeeEntity> empList = StreamSupport.stream(iterable.splitIterator(),false)
+      List<EmployeeEntity> employees = this.emplRepo.findAllByDepartmentNumber(departmentNumber);
+      employees.clear();
+    //  this.deptRepo.updateDepartment
+//        List<EmployeeEntity> empList = StreamSupport.stream(department..splitIterator(),false)
 //                .collect(Collectors.toList());
 
 

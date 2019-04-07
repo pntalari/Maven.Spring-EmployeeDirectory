@@ -28,13 +28,13 @@ public class EmployeeController {
   }
 
   @PostMapping("/API/")
-  public ResponseEntity<EmployeeEntity> createEmpl(@RequestBody EmployeeEntity employee, @RequestBody DepartmentEntity department) {
-    return new ResponseEntity<>(this.services.createEmployee(employee, department), HttpStatus.CREATED);
+  public ResponseEntity<EmployeeEntity> createEmpl(@RequestBody EmployeeEntity employee) {
+    return new ResponseEntity<>(this.services.createEmployee(employee), HttpStatus.CREATED);
   }
 
   @DeleteMapping("/API/{employee}")
   public ResponseEntity<Boolean> deleteEmpl(@PathVariable EmployeeEntity employee) {
-    return new ResponseEntity<>(this.services.deleteOneEmpl(employee),HttpStatus.OK);
+    return new ResponseEntity<>(this.services.deleteEmpl(employee),HttpStatus.OK);
   }
 
 
